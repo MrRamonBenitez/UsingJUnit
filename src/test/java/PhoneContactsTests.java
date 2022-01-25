@@ -50,7 +50,7 @@ public class PhoneContactsTests {
 
     @Test
     public void testAddContactToMap() {
-        
+        // arrange
         // создание набора тестовых контактов
         Contact[] contacts = {new Contact("Ivan Petrov", "+79354445566"),
                 new Contact("Petr Ivanov", "+79374497788"),
@@ -78,7 +78,6 @@ public class PhoneContactsTests {
 
         // создание набора пустых списков контактов по группам
         for (String name : groupName) phoneContacts.addGroup(name);
-
         // act
         for (Contact contact : contacts) phoneContacts.addContactToMap(contact, groupName);
         // assert
