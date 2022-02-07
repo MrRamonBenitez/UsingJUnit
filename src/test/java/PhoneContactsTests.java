@@ -7,13 +7,19 @@ public class PhoneContactsTests {
     PhoneContacts phoneContacts;
 
     @BeforeAll
-    public static void started() { System.out.println("Tests started"); }
+    public static void started() {
+        System.out.println("Tests started");
+    }
 
     @AfterEach
-    public void finished() { System.out.println("Test completed"); }
+    public void finished() {
+        System.out.println("Test completed");
+    }
 
     @AfterAll
-    public static void finishedAll() { System.out.println("Tests completed"); }
+    public static void finishedAll() {
+        System.out.println("Tests completed");
+    }
 
     @BeforeEach
     void setUp() {
@@ -21,37 +27,49 @@ public class PhoneContactsTests {
     }
 
     @Test
-    public void testAddGroup() {
+    public void testCountingNumberGroups() {
         //arrange
-        String groupName = "Family";
-        Map<String, List<Contact>> expected = new HashMap<>();
-        expected.put("Family", new ArrayList<>());
+        int groupNumber;
+        String[] groupName = new String[]{"Family", "Work", "Friends"};
+        int expectedGroupNumber = groupName.length;
+        for (String name : groupName) phoneContacts.addGroup(name);
 
         //act
-        phoneContacts.addGroup(groupName);
+        groupNumber = phoneContacts.countingNumberGroups(phoneContacts);
 
         //assert
-        assertEquals(expected, phoneContacts.getGroupMap());
+        assertEquals(expectedGroupNumber, groupNumber);
     }
 
     @Test
-    public void testAddGroupTrue() {
-        // arrange
+    public void testGroupPresenceCheck() {
+        //arrange
+        String testGroupName = "Work";
         String[] groupName = new String[]{"Family", "Work", "Friends"};
-        Map<String, List<Contact>> expected = new HashMap<>();
-        for (String name : groupName) expected.put(name, new ArrayList<>());
-        // act
-        for (String name : groupName) {
-            phoneContacts.addGroup(name);
-            // assert
-            assertTrue(expected.containsKey(name));
-        }
+        for (String name : groupName) phoneContacts.addGroup(name);
+
+        //assert
+        assertTrue(phoneContacts.groupPresenceCheck(testGroupName));
     }
 
     @Test
-    public void testAddContactToMap() {
-        // arrange
-        // создание набора тестовых контактов
+    public void testGroupAbsenceCheck() {
+        //arrange
+        String testGroupName = "Club";
+        String[] groupName = new String[]{"Family", "Work", "Friends"};
+        for (String name : groupName) phoneContacts.addGroup(name);
+
+        //assert
+        assertFalse(phoneContacts.groupPresenceCheck(testGroupName));
+    }
+
+    @Test
+    public void testGetСontactByPhoneNumber() {
+        //arrange
+        Contact testContact;
+        Contact expectedContact = new Contact("Ivan Petrov", "+79354445566");
+        String testNumber = "+79354445566";
+
         Contact[] contacts = {new Contact("Ivan Petrov", "+79354445566"),
                 new Contact("Petr Ivanov", "+79374497788"),
                 new Contact("Nikolai Semenov", "+79374494353"),
@@ -67,22 +85,17 @@ public class PhoneContactsTests {
             testList.add(position, contact);
         }
 
-        // подготовка ожидаемых наборов по группам телефонных контактов
-        Map<String, List<Contact>> expected = new HashMap<>();
-        expected.put("Family", testList);
-        expected.put("Work", testList);
-        expected.put("Friends", testList);
-
         // набор наименований групп
         String[] groupName = new String[]{"Family", "Work", "Friends"};
 
-        // создание набора пустых списков контактов по группам
+        //создание тестового объекта
         for (String name : groupName) phoneContacts.addGroup(name);
-        // act
         for (Contact contact : contacts) phoneContacts.addContactToMap(contact, groupName);
-        // assert
-        assertEquals(expected, phoneContacts.getGroupMap());
 
+        //act
+        testContact = phoneContacts.getСontactByPhoneNumber(testNumber);
+
+        //assert
+        assertEquals(expectedContact, testContact);
     }
-
 }

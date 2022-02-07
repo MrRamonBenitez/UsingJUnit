@@ -35,6 +35,30 @@ public class PhoneContacts {
         return true;
     }
 
+    public int countingNumberGroups(PhoneContacts phoneContacts) {
+        Set<String> keyMassive = phoneContacts.groupMap.keySet();
+        return keyMassive.size();
+    }
+
+    public boolean groupPresenceCheck(String groupName) {
+        return groupMap.containsKey(groupName);
+    }
+
+    public Contact getСontactByPhoneNumber(String number) {
+        Contact tempContact = null;
+        Iterator<String> key = groupMap.keySet().iterator();
+        while (key.hasNext()) {
+            List<Contact> contactList = groupMap.get(key.next());
+            ListIterator<Contact> i = contactList.listIterator();
+            for (ListIterator<Contact> it = i; it.hasNext();) {
+                tempContact = it.next();
+                if (number.equals(tempContact.getMobileNumber()))
+                    break;
+            }
+        }
+        return tempContact;
+    }
+
     @Override
     public String toString () {
         StringBuilder outputGroup = new StringBuilder();
