@@ -7,14 +7,14 @@ public class Main {
         System.out.println("Программа Справочник");
         PhoneContacts phoneContacts = new PhoneContacts();
 
-        phoneContacts = groupCreate (phoneContacts, scanner);
-        phoneContacts = contactsListCreate (phoneContacts, scanner);
+        groupCreate (phoneContacts, scanner);
+        contactsListCreate (phoneContacts, scanner);
 
-        System.out.print(phoneContacts.toString());
+        System.out.print(phoneContacts);
 
     }
 
-    private static PhoneContacts groupCreate (PhoneContacts phoneContacts, Scanner scanner) {
+    private static void groupCreate (PhoneContacts phoneContacts, Scanner scanner) {
         while (true) {
 
             System.out.println("Создать группу контактов (введите название или введите <нет>)?");
@@ -26,11 +26,9 @@ public class Main {
             phoneContacts.addGroup(nameGroup);
         }
 
-        return phoneContacts;
-
     }
 
-    private static PhoneContacts contactsListCreate (PhoneContacts phoneContacts, Scanner scanner) {
+    private static void contactsListCreate (PhoneContacts phoneContacts, Scanner scanner) {
         while (true) {
             System.out.println("Создать контакт (введите наименование и его номер или введите <нет>)?");
             System.out.print("> ");
@@ -49,9 +47,6 @@ public class Main {
             phoneContacts.addContactToMap(nextContact, groupParts);
 
         }
-
-        return phoneContacts;
-
     }
 
 }
