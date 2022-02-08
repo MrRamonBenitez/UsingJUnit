@@ -2,7 +2,7 @@ import java.util.*;
 
 public class PhoneContacts {
 
-    private Map<String, List<Contact>> groupMap;
+    private final Map<String, List<Contact>> groupMap;
 
     public PhoneContacts() {
         this.groupMap = new HashMap<>();
@@ -44,19 +44,33 @@ public class PhoneContacts {
         return groupMap.containsKey(groupName);
     }
 
-    public Contact getСontactByPhoneNumber(String number) {
-        Contact tempContact = null;
-        Iterator<String> key = groupMap.keySet().iterator();
-        while (key.hasNext()) {
-            List<Contact> contactList = groupMap.get(key.next());
+    public Contact getContactByPhoneNumber(String number) {
+        Contact tempContact;
+        for (String s : groupMap.keySet()) {
+            List<Contact> contactList = groupMap.get(s);
             ListIterator<Contact> i = contactList.listIterator();
-            for (ListIterator<Contact> it = i; it.hasNext();) {
-                tempContact = it.next();
+            while (i.hasNext()) {
+                tempContact = i.next();
                 if (number.equals(tempContact.getMobileNumber()))
-                    break;
+                   return tempContact;
             }
         }
-        return tempContact;
+        System.out.println("Такого контакта нет в списке!");
+        return null;
+    }
+
+    public boolean contactPresenceCheck(String number) {
+        for (String s : groupMap.keySet()) {
+            List<Contact> contactList = groupMap.get(s);
+            ListIterator<Contact> i = contactList.listIterator();
+            while (i.hasNext()) {
+                Contact tempContact = i.next();
+                if (number.equals(tempContact.getMobileNumber()))
+                    return true;
+            }
+        }
+        System.out.println("Такого контакта нет в списке!");
+        return false;
     }
 
     @Override
@@ -74,8 +88,7 @@ public class PhoneContacts {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof PhoneContacts)) return false;
-        PhoneContacts that = (PhoneContacts) o;
+        if (!(o instanceof PhoneContacts that)) return false;
         return Objects.equals(getGroupMap(), that.getGroupMap());
     }
 
