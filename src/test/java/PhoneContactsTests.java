@@ -64,7 +64,7 @@ public class PhoneContactsTests {
     }
 
     @Test
-    public void testGetСontactByPhoneNumber() {
+    public void testGetContactByPhoneNumber() {
         //arrange
         Contact testContact;
         Contact expectedContact = new Contact("Ivan Petrov", "+79354445566");
@@ -93,9 +93,75 @@ public class PhoneContactsTests {
         for (Contact contact : contacts) phoneContacts.addContactToMap(contact, groupName);
 
         //act
-        testContact = phoneContacts.getСontactByPhoneNumber(testNumber);
+        testContact = phoneContacts.getContactByPhoneNumber(testNumber);
 
         //assert
         assertEquals(expectedContact, testContact);
     }
+
+    @Test
+    public void testContactPresenceCheck() {
+        //arrange
+        String testNumber = "+79354445566";
+
+        Contact[] contacts = {new Contact("Ivan Petrov", "+79354445566"),
+                new Contact("Petr Ivanov", "+79374497788"),
+                new Contact("Nikolai Semenov", "+79374494353"),
+                new Contact("Michaela Nekrasova", "+79384498900"),
+                new Contact("Svetlana Semenova", "+793744947777")};
+
+        // создание тестового списка контактов
+        List<Contact> testList = new ArrayList<>();
+        for (Contact contact : contacts) {
+            Collections.sort(testList);
+            int position = Collections.binarySearch(testList, contact);
+            if (position == -1) position = Math.abs(position) - 1;
+            testList.add(position, contact);
+        }
+
+        // набор наименований групп
+        String[] groupName = new String[]{"Family", "Work", "Friends"};
+
+        //создание тестового объекта
+        for (String name : groupName) phoneContacts.addGroup(name);
+        for (Contact contact : contacts) phoneContacts.addContactToMap(contact, groupName);
+
+        //act
+        phoneContacts.contactPresenceCheck(testNumber);
+
+        //assert
+        assertTrue(phoneContacts.contactPresenceCheck(testNumber));
+    }
+
+    @Test
+    public void testContactAbsenceCheck() {
+        //arrange
+        String testNumber = "+79373400311";
+
+        Contact[] contacts = {new Contact("Ivan Petrov", "+79354445566"),
+                new Contact("Petr Ivanov", "+79374497788"),
+                new Contact("Nikolai Semenov", "+79374494353"),
+                new Contact("Michaela Nekrasova", "+79384498900"),
+                new Contact("Svetlana Semenova", "+793744947777")};
+
+        // создание тестового списка контактов
+        List<Contact> testList = new ArrayList<>();
+        for (Contact contact : contacts) {
+            Collections.sort(testList);
+            int position = Collections.binarySearch(testList, contact);
+            if (position == -1) position = Math.abs(position) - 1;
+            testList.add(position, contact);
+        }
+
+        // набор наименований групп
+        String[] groupName = new String[]{"Family", "Work", "Friends"};
+
+        //создание тестового объекта
+        for (String name : groupName) phoneContacts.addGroup(name);
+        for (Contact contact : contacts) phoneContacts.addContactToMap(contact, groupName);
+
+        //assert
+        assertFalse(phoneContacts.contactPresenceCheck(testNumber));
+    }
+
 }
