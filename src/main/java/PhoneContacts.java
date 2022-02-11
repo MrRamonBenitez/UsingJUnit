@@ -1,7 +1,6 @@
 import java.util.*;
 
 public class PhoneContacts {
-
     private final Map<String, List<Contact>> groupMap;
 
     public PhoneContacts() {
@@ -12,32 +11,32 @@ public class PhoneContacts {
         return groupMap;
     }
 
-    public boolean addGroup (String groupName) {
+    public void addGroup (String groupName) {
         if (groupMap.containsKey(groupName)) {
             System.out.println("Группа уже существует!");
-            return false;
+        } else {
+            groupMap.put(groupName, new ArrayList<>());
         }
-        groupMap.put(groupName, new ArrayList<>());
-        return true;
     }
 
-    public boolean addContactToMap (Contact contact, String[] groupNames) {
+    public void addContact (Contact contact, String[] groupNames) {
         for (String name : groupNames) {
             List<Contact> contactList = groupMap.get(name);
-            if (contactList == null) {
-                return false;
+            if (!(contactList == null)) {
+                Collections.sort(contactList);
+                int position = Collections.binarySearch(contactList, contact);
+                if (position == -1) {
+                    position = 0;
+                    contactList.add(position, contact);
+                } else {
+                    contactList.add(position, contact);
+                }
             }
-            Collections.sort(contactList);
-            int position = Collections.binarySearch(contactList, contact);
-            if (position == -1) position = Math.abs(position) - 1;
-            contactList.add(position, contact);
         }
-        return true;
     }
 
-    public int countingNumberGroups(PhoneContacts phoneContacts) {
-        Set<String> keyMassive = phoneContacts.groupMap.keySet();
-        return keyMassive.size();
+    public int getNumberGroups() {
+        return groupMap.keySet().size();
     }
 
     public boolean groupPresenceCheck(String groupName) {
@@ -45,14 +44,12 @@ public class PhoneContacts {
     }
 
     public Contact getContactByPhoneNumber(String number) {
-        Contact tempContact;
+        Contact resultContact;
         for (String s : groupMap.keySet()) {
             List<Contact> contactList = groupMap.get(s);
-            ListIterator<Contact> i = contactList.listIterator();
-            while (i.hasNext()) {
-                tempContact = i.next();
-                if (number.equals(tempContact.getMobileNumber()))
-                   return tempContact;
+            for (Contact contact : contactList) {
+                resultContact = contact;
+                if (number.equals(resultContact.getMobileNumber())) { return resultContact; }
             }
         }
         System.out.println("Такого контакта нет в списке!");
@@ -62,11 +59,8 @@ public class PhoneContacts {
     public boolean contactPresenceCheck(String number) {
         for (String s : groupMap.keySet()) {
             List<Contact> contactList = groupMap.get(s);
-            ListIterator<Contact> i = contactList.listIterator();
-            while (i.hasNext()) {
-                Contact tempContact = i.next();
-                if (number.equals(tempContact.getMobileNumber()))
-                    return true;
+            for (Contact tempContact : contactList) {
+                if (number.equals(tempContact.getMobileNumber())) { return true; }
             }
         }
         System.out.println("Такого контакта нет в списке!");
@@ -87,8 +81,8 @@ public class PhoneContacts {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof PhoneContacts that)) return false;
+        if (this == o) { return true; }
+        if (!(o instanceof PhoneContacts that)) { return false; }
         return Objects.equals(getGroupMap(), that.getGroupMap());
     }
 

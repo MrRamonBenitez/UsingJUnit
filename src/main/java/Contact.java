@@ -2,8 +2,8 @@ import java.util.Objects;
 
 public class Contact implements Comparable<Contact> {
 
-    private String name;
-    private String mobileNumber;
+    private final String name;
+    private final String mobileNumber;
 
     public Contact(String name, String mobileNumber) {
         this.name = name;
@@ -27,9 +27,9 @@ public class Contact implements Comparable<Contact> {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Contact)) return false;
-        Contact contact = (Contact) o;
-        return Objects.equals(name, contact.name) && Objects.equals(getMobileNumber(), contact.getMobileNumber());
+        if (!(o instanceof Contact contact)) return false;
+        return Objects.equals(name, contact.name) && Objects.equals(getMobileNumber(),
+               contact.getMobileNumber());
     }
 
     @Override
